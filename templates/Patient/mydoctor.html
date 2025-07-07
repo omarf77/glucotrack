@@ -1,0 +1,82 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% include 'Homepage/favicon.html' %}
+  <title>My Doctor - GlucoTrack</title>
+  {% include 'Patient/navbar.html' %}
+  <style>
+    .doctor-card {
+      background-color: #ffffff;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      max-width: 500px;
+      margin: 30px auto;
+    }
+    .doctor-icon {
+      font-size: 40px;
+    }
+    .doctor-info p {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+    .choose-btn {
+      margin-top: 15px;
+    }
+    .chat-container {
+      max-width: 700px;
+      margin: 40px auto;
+    }
+    .chat-box {
+      background-color: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    }
+    .hovercu:hover {
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container mt-5">
+  <div class="doctor-card text-center">
+    <h3 class="text-success fw-bold">
+      <span class="doctor-icon">👨‍⚕️</span> My Doctor
+    </h3>
+
+    {% if patient.doctor %}
+      {% if patient.is_approved %}
+        <!-- Doctor Info (approved) -->
+        <div class="doctor-info mt-4">
+          <p><strong>Doctor Name:</strong> {{ patient.doctor.user.username }}</p>
+          <p><strong>Department:</strong> {{ patient.doctor.department }}</p>
+          <p><strong>Specialization:</strong> {{ patient.doctor.specialization }}</p>
+          <p><strong>Phone Number:</strong> {{ patient.doctor.user.phone }}</p>
+          <p><strong>Email:</strong> {{ patient.doctor.user.email }}</p>
+        </div>
+        <!-- Chat Button -->
+        <div class="text-center mt-4">
+          <a href="{% url 'chat' patient.doctor.user.id %}" class="hovercu btn btn-outline-primary">
+            💬 Open Chat with {{ patient.doctor.user.username }}
+          </a>
+        </div>
+      {% else %}
+        <!-- Waiting for approval -->
+        <div class="alert alert-warning mt-4">
+          ⏳ Your request to connect with <strong>Dr. {{ patient.doctor.user.username }}</strong> is pending approval.
+        </div>
+      {% endif %}
+    {% else %}
+      <!-- Choose Doctor Form -->
+      <form method="post" action="{% url 'assign_doctor' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary choose-btn">🔍 Choose a doctor now</button>
+      </form>
+    {% endif %}
+  </div>
+</div>
+
+</body>
+</html>

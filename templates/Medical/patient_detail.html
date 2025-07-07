@@ -1,0 +1,134 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% include 'Homepage/favicon.html'%}<!--favicon-->
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Patient Details - GlucoTrack</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
+ 
+</head>
+<body>
+
+
+
+<main class="container py-5">
+  <div class="d-flex gap-2 mb-4">
+     <a href="{% url 'medical_staff_patients' %}" class="btn btn-outline-secondary btn-sm">
+      <i class="bi bi-arrow-left"></i> Back
+    </a>
+    <h4 class="text-success mb-0">Patient Details</h4>
+   
+  </div>
+
+  <div class="row g-4">
+    <!-- Patient Info -->
+    <div class="col-md-4">
+      <div class="card p-4 shadow-sm h-100">
+        <h5 class="text-success">Patient Info</h5>
+        <ul class="list-unstyled mb-0">
+          <li><strong>Name:</strong> {{ patient.user.username }}</li>
+          <li><strong>Email:</strong> {{ patient.user.email }}</li>
+          <li><strong>Phone:</strong> {{ patient.phone }}</li>
+          <li><strong>Age:</strong> {{ patient.age }}</li>
+          <li><strong>Type:</strong> {{ patient.diabetes_type }}</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Last Reading -->
+    <div class="col-md-8">
+      <div class="card p-4 shadow-sm h-100">
+        <h5 class="text-success">Last Reading</h5>
+        {% if entries %}
+          <p class="mb-1"><strong>Date:</strong> {{ entries.0.date }}</p>
+          <p class="mb-1"><strong>Type:</strong> {{ entries.0.reading_type }}</p>
+          <p class="mb-1"><strong>Value:</strong> {{ entries.0.blood_sugar }} mg/dL</p>
+          <p class="mb-1"><strong>Status:</strong> 
+            {% if entries.0.blood_sugar > 180 %}
+              <span class="badge bg-warning text-dark badge-status">⚠ High</span>
+            {% elif entries.0.blood_sugar < 70 %}
+              <span class="badge bg-danger badge-status">⚠ Low</span>
+            {% else %}
+              <span class="badge bg-success badge-status">✔ Normal</span>
+            {% endif %}
+          </p>
+          <p class="mb-0"><strong>Note:</strong> {{ entries.0.note|default:"-" }}</p>
+        {% else %}
+          <p class="text-muted">No readings found.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+<!-- داخل الـ Reading History -->
+<div class="card mt-5 p-4 shadow-sm">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h5 class="text-success mb-0">Reading History</h5>
+    <form method="post" action="{% url 'mark_all_readings_seen' patient.id %}">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-outline-success btn-sm">
+        <i class="bi bi-check2-square me-1"></i> Mark All as Seen
+      </button>
+    </form>
+  </div>
+
+  {% if entries %}
+    <div class="table-responsive">
+      <table class="table table-bordered align-middle text-center mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Value</th>
+            <th>Status</th>
+            <th>Note</th>
+            <th>Seen</th> <!-- ✅ العمود الجديد -->
+          </tr>
+        </thead>
+        <tbody>
+          {% for entry in entries %}
+            <tr>
+              <td>{{ entry.date }}</td>
+              <td>{{ entry.reading_type }}</td>
+              <td>{{ entry.blood_sugar }}</td>
+              <td>
+                {% if entry.blood_sugar > 180 %}
+                  <span class="badge bg-warning text-dark badge-status">⚠ High</span>
+                {% elif entry.blood_sugar < 70 %}
+                  <span class="badge bg-danger badge-status">⚠ Low</span>
+                {% else %}
+                  <span class="badge bg-success badge-status">✔ Normal</span>
+                {% endif %}
+              </td>
+              <td>{{ entry.note|default:"-" }}</td>
+              <td>
+                {% if not entry.seen_by_doctor %}
+                  <form method="post" action="{% url 'mark_reading_seen' entry.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-sm btn-outline-success">Done</button>
+                  </form>
+                {% else %}
+                  <span class="badge bg-secondary">Seen</span>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="text-muted">No reading history available.</p>
+  {% endif %}
+</div>
+
+</main>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

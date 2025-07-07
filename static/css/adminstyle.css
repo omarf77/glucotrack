@@ -1,0 +1,54 @@
+/*main style*/
+  body {
+      background-color: #f8f9fa;
+    }
+    .sidebar {
+      height: 135vh;
+      background-color: #ffffff;
+      border-right: 1px solid #dee2e6;
+    }
+    .sidebar .nav-link {
+      color: #198754;
+    }
+    .sidebar .nav-link.active {
+      background-color: #d1e7dd;
+      font-weight: bold;
+    }
+    .header {
+      background-color: #ffffff;
+      border-bottom: 1px solid #dee2e6;
+    }
+    .card {
+      border: none;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      height: 200px;
+      justify-content: center;
+      
+    }
+      #diabetesPieChart {
+    max-width: 300px;
+    height: 1000px;
+    margin: auto;
+  }
+    .custom_card {
+      border: none;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      height: 400px;
+     background-color: white;
+     border-radius: 5px;
+    }
+    .solidline{
+      border-top: #198754 solid 5px;
+    }
+    .nav-link.active {
+  background-color: #d1e7dd; 
+  color: #198754 !important; 
+  font-weight: bold;
+  border-radius: 5px;
+}
+.nav-link.active i {
+  color: #198754;
+}
+table {
+  table-layout: auto; 
+}

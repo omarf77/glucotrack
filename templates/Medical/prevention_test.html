@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% include 'Homepage/favicon.html' %}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Prevention Test</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
+  <link href="{% static 'css/adminstyle.css' %}" rel="stylesheet">
+</head>
+
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      {% include 'Medical/sidebar.html' %}
+
+      <main class="col-md-10">
+        <div class="header p-3 d-flex justify-content-between align-items-center">
+          <h4 class="mb-0 text-success">Prevention Risk Test</h4>
+        </div>
+
+        <div class="container py-4">
+          <iframe src="https://worlddiabetesday.org/type-2-diabetes-risk-assessment/ar/"
+                  class="w-100"
+                  height="750"
+                  style="border: 1px solid #ccc;" 
+                  scrolling="no"></iframe>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <footer class="bg-dark text-light py-4 mt-5">
+    <div class="container text-center">
+      <p class="mb-1">© 2025 GlucoTrack</p>
+      <small>Empowering health, one reading at a time.</small>
+    </div>
+  </footer>
+
+  <script>
+    const currentPath = window.location.pathname;
+    document.querySelectorAll('.nav-link').forEach(link => {
+      if (link.href.includes(currentPath)) {
+        link.classList.add('active');
+      } else {
+        link.classList.remove('active');
+      }
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

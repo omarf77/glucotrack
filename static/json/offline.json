@@ -1,0 +1,37 @@
+{
+  "version": 1751131437979,
+  "fileList": [
+
+    "/static/json/data.json",
+    
+    "/static/js/main.js",
+    "/static/js/c3runtime.js",
+    "/static/js/objRefTable.js",
+    "/static/js/c3main.js",
+    "/static/js/dispatchworker.js",
+    "/static/js/jobworker.js",
+    "/static/js/workermain.js",
+    
+    "/static/js/modernjscheck.js",
+    "/static/js/supportcheck.js",
+    "/static/js/offlineclient.js",
+    
+    "/static/icon/icon-16.png",
+    "/static/icon/icon-32.png",
+    "/static/icon/icon-64.png",
+    "/static/icon/icon-128.png",
+    "/static/icon/icon-256.png",
+    "/static/icon/icon-512.png",
+    "/static/icon/loading-logo.png",
+
+    "/static/css/gamestyle.css",
+
+    "/static/image/water.webp",
+    "/static/image/icons.webp",
+    "/static/image/congrats.webp",
+    "/static/image/shared-0-sheet3.webp",
+    "/static/image/school.webp",
+
+    "/static/js/register-sw.js"
+  ]
+}

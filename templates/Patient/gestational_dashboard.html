@@ -1,0 +1,211 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  {% include 'Homepage/favicon.html' %}
+  <title>Gestational Dashboard - GlucoTrack</title>
+
+  <!-- Bootstrap + Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+  
+</head>
+
+<body>
+<header class="sticky-top bg-white shadow-sm">
+  <nav class="navbar navbar-expand-lg">
+    <div class="container py-2">
+      <a href="{% url 'gestational_dashboard' %}" class="navbar-brand d-flex align-items-center">
+         <img src="{% static 'icon/favicon3.png' %}" alt="Logo" height="50" class="me-2">
+         <h2 class="fw-bold text-success mb-0">GlucoTrack</h2>
+       </a>
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+        <i class="bi bi-list fs-3 text-success"></i>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
+        <ul class="navbar-nav me-3">
+          <li class="nav-item"><a class="nav-link" href="{% url 'patient_blood' %}">Add Entry</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'patient_fullhistory' %}">Reading History</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'patient_kidsgame' %}">Kids’ Corner</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'patient_blog' %}">Blog</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'patient_mydoctor' %}">My Doctor</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'patient_prevention_test' %}">Prevention Test</a></li>
+
+        </ul>
+        <div class="d-flex">
+          <a href="{% url 'logout' %}" class="btn btn-outline-danger">Logout</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+
+
+  <main class="container py-5">
+    <h2 class="fw-bold text-success mb-2">Welcome, {{ request.user.username }}</h2>
+
+    <!-- Average Glucose Block -->
+  <div class="row g-4 mb-4">
+
+  <div class="col-md-4">
+    <div class="card border-info shadow-sm p-3">
+      <h6 class="fw-bold text-muted">Average Glucose (30 days)</h6>
+      <h4 class="text-info fw-bold">{{ avg_glucose }} mg/dL</h4>
+      <small class="text-muted">Based on recent 30-day data</small>
+    </div>
+  </div>
+
+  <!-- Recent Alert Block -->
+  <div class="col-md-4">
+    <div class="card border-{{ alert_status.1 }} shadow-sm p-3">
+      <h6 class="fw-bold text-muted">Recent Alert</h6>
+      <h5 class="text-{{ alert_status.1 }}">
+        {% if alert_status.0 == "High" %}
+          ⚠ High glucose detected
+        {% elif alert_status.0 == "Low" %}
+          ⚠ Low glucose detected
+        {% elif alert_status.0 == "Normal" %}
+          ✅ Normal reading
+        {% else %}
+          No recent readings
+        {% endif %}
+      </h5>
+      {% if last_glucose %}
+        <small class="text-muted">Last reading: {{ last_glucose }} mg/dL</small>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Overall Health Status -->
+  <div class="col-md-4">
+    <div class="card border-{{ overall_status.1 }} shadow-sm p-3">
+      <h6 class="fw-bold text-muted">Overall Health Status</h6>
+      <h5 class="text-{{ overall_status.1 }}">{{ overall_status.0 }}</h5>
+      <small class="text-muted">
+        {% if overall_status.0 == "Stable" %}
+          Your readings are within safe limits
+        {% elif overall_status.0 == "Unstable" %}
+          Glucose levels are consistently high
+        {% else %}
+          Glucose level too low
+        {% endif %}
+      </small>
+    </div>
+  </div>
+</div>
+</div>
+
+
+  <!-- Due Date -->
+    <div class="row g-4 mb-5">
+     <div class="col-md-12">
+        <div class="card shadow-sm p-4 text-center border-start border-4 border-info">
+          <h6 class="fw-bold text-success mb-2">Estimated Due Date</h6>
+          <input type="date" class="form-control mb-3" id="dueDateInput" />
+          <h5 class="text-muted">Selected: <span id="dueDateLabel">---</span></h5>
+          <h5><span id="daysRemaining" class="text-success fw-bold">--</span> days to go</h5>
+        </div>
+      </div>
+    </div>
+    <p></p>
+
+    <!-- Chart -->
+    <div class="row g-4 mb-5">
+     <div class="col-md-12">
+        <div class="card shadow-sm p-3">
+        <h6 class="fw-bold text-success text-center mb-3">Fasting</h6>
+        <canvas id="chartall"></canvas>
+      </div>
+    </div>
+
+ 
+
+    <!-- Recommendations -->
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="card shadow-sm p-3 h-100">
+          <h6 class="fw-bold text-success mb-2">Diet</h6>
+          <ul class="text-muted small mb-0">
+            <li>Eat 6 small meals daily</li>
+            <li>Avoid sugary snacks</li>
+            <li>Choose whole grains</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card shadow-sm p-3 h-100">
+          <h6 class="fw-bold text-success mb-2">Exercise</h6>
+          <ul class="text-muted small mb-0">
+            <li>Walk 15–30 mins after meals</li>
+            <li>Avoid prolonged sitting</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card shadow-sm p-3 h-100">
+          <h6 class="fw-bold text-success mb-2">Monitoring</h6>
+          <ul class="text-muted small mb-0">
+            <li>Check glucose 4 times/day</li>
+            <li>Record symptoms and readings</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="bg-dark text-light py-4 mt-5">
+    <div class="container text-center">
+      <p class="mb-1">© 2025 GlucoTrack</p>
+      <small>Supporting mothers with care and insight.</small>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+  // Filter readings by type
+  const allentryData = {{ allentry|safe }};
+  const allentryLabels = {{ labels_allentry|safe }};
+  // Due date
+  document.getElementById("dueDateInput").addEventListener("change", function () {
+      const selectedDate = new Date(this.value);
+      const today = new Date();
+      const timeDiff = selectedDate - today;
+
+      const daysLeft = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+      document.getElementById("dueDateLabel").textContent = this.value || "---";
+      document.getElementById("daysRemaining").textContent = daysLeft > 0 ? daysLeft : "0";
+  });
+  // Function to draw charts
+  const createChart = (ctxId, labels, data, color) => {
+  new Chart(document.getElementById(ctxId), {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: "Blood Sugar",
+        data: data,
+        backgroundColor: color,
+        borderColor: color,
+        fill: false,
+        tension: 0.3
+      }]
+    },
+    options: {
+      scales: {
+        y: { beginAtZero: true }
+      }
+    }
+  });
+};
+
+  createChart("chartall", allentryLabels, allentryData, "#4caf50");
+  
+
+</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

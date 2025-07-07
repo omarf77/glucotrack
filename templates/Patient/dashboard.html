@@ -1,0 +1,205 @@
+{% load static %}
+{% load custom_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+{% include 'Homepage/favicon.html'%}<!--favicon-->
+
+{% include 'Patient/navbar.html'%}<!--Navbar-->
+<head>
+  <title>Dashboard - GlucoTrack</title>
+</head>
+<body>
+
+
+<main class="container py-5">
+  <h2 class="fw-bold text-success mb-2">Welcome, {{ request.user.username }}</h2>
+  <p class="text-muted mb-4">Your personalized diabetes management panel.</p>
+
+  <!--dash Cards -->
+  <div class="row g-4 mb-5">
+    <div class="col-md-3 col-sm-6">
+      <div class="card text-center shadow-sm border-0 p-3">
+        <div class="card-body">
+          <i class="bi bi-pencil-square fs-2 text-success mb-3"></i>
+          <h6 class="fw-bold mb-2">Add Entry</h6>
+          <p class="small text-muted mb-3">Log blood sugar reading</p>
+          <a href="{% url 'patient_blood' %}" class="btn btn-outline-success btn-sm px-4">Enter Now</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+      <div class="card text-center shadow-sm border-0 p-3">
+        <div class="card-body">
+          <i class="bi bi-clock-history fs-2 text-success mb-3"></i>
+          <h6 class="fw-bold mb-2">Reading History</h6>
+          <p class="small text-muted mb-3">Track and filter data</p>
+          <a href="{% url 'patient_fullhistory' %}" class="btn btn-outline-success btn-sm px-4">View</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+      <div class="card text-center shadow-sm border-0 p-3">
+        <div class="card-body">
+          <i class="bi bi-emoji-smile fs-2 text-success mb-3"></i>
+          <h6 class="fw-bold mb-2">Kids’ Corner</h6>
+          <p class="small text-muted mb-3">Fun & learning for kids</p>
+          <a href="{% url 'patient_kidsgame' %}" class="btn btn-outline-success btn-sm px-4">Explore</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+      <div class="card text-center shadow-sm border-0 p-3">
+        <div class="card-body">
+          <i class="bi bi-journal-text fs-2 text-success mb-3"></i>
+          <h6 class="fw-bold mb-2">Blog</h6>
+          <p class="small text-muted mb-3">Articles & tips</p>
+          <a href="{% url 'patient_blog' %}" class="btn btn-outline-success btn-sm px-4">Read</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Last Reading -->
+  <div class="mb-5">
+    <h5 class="fw-bold text-success mb-3">Last Reading Summary</h5>
+    <div class="card shadow-sm p-4" id="lastReadingBox">
+      {% if last_entry %}
+        <div class="card p-4 shadow-sm mb-4">
+          <div class="row text-center">
+            <div class="col-md-2">
+             <p class="mb-1 fw-bold text-muted">Date</p>
+              <p>{{ last_entry.date }}</p>
+            </div>
+            <div class="col-md-2">
+              <p class="mb-1 fw-bold text-muted">Type</p>
+              <p>{{ last_entry.reading_type }}</p>
+            </div>
+            <div class="col-md-2">
+              <p class="mb-1 fw-bold text-muted">Blood Sugar</p>
+              <p>{{ last_entry.blood_sugar }} mg/dL</p>
+            </div>
+            <div class="col-md-2">
+              <p class="mb-1 fw-bold text-muted">Status</p>
+              <p>
+                {% if last_entry.blood_sugar > 180 %}
+                  <span class="badge bg-warning text-dark">⚠ High</span>
+                {% elif last_entry.blood_sugar < 70 %}
+                  <span class="badge bg-danger">⚠ Low</span>
+                {% else %}
+                  <span class="badge bg-success">✔ Normal</span>
+                {% endif %}
+              </p>
+            </div>
+            <div class="col-md-4">
+              <p class="mb-1 fw-bold text-muted">Note</p>
+              <p>{{ last_entry.note|default:"-" }}</p>
+            </div>
+    </div>
+  </div>
+{% else %}++
+  <p class="text-muted">No readings yet.</p>
+{% endif %}
+
+    </div>
+  </div>
+
+  <!-- Glucose Charts -->
+  <div class="row g-4">
+    <div class="col-md-4">
+      <div class="card shadow-sm p-3">
+        <h6 class="fw-bold text-success text-center mb-3">Fasting</h6>
+        <canvas id="chartFasting"></canvas>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow-sm p-3">
+        <h6 class="fw-bold text-success text-center mb-3">Random</h6>
+        <canvas id="chartRandom" ></canvas>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow-sm p-3">
+        <h6 class="fw-bold text-success text-center mb-3">After Meal</h6>
+        <canvas id="chartPostMeal"></canvas>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer class="bg-dark text-light py-4 mt-5">
+  <div class="container text-center">
+    <p class="mb-1">© 2025 GlucoTrack</p>
+    <small>Empowering health, one reading at a time.</small>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  // Filter readings by type
+  const fastingData = {{ fasting|safe }};
+  const fastingLabels = {{ labels_fasting|safe }};
+
+  const randomData = {{ random|safe }};
+  const randomLabels = {{ labels_random|safe }};
+
+  const afterMealData = {{ after_meal|safe }};
+  const afterMealLabels = {{ labels_after_meal|safe }};
+
+  // Function to draw charts
+  const createChart = (ctxId, labels, data, color) => {
+  new Chart(document.getElementById(ctxId), {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: "Blood Sugar",
+        data: data,
+        backgroundColor: color,
+        borderColor: color,
+        fill: false,
+        tension: 0.3
+      }]
+    },
+    options: {
+      scales: {
+        y: { beginAtZero: true }
+      }
+    }
+  });
+};
+
+  createChart("chartFasting", fastingLabels, fastingData, "#4caf50");
+  createChart("chartRandom", randomLabels, randomData, "#2196f3");
+  createChart("chartPostMeal", afterMealLabels, afterMealData, "#ff9800");
+
+  // Display the last reading
+  const lastReadingBox = document.getElementById("lastReadingBox");
+  if (readings.length > 0) {
+    const last = readings[readings.length - 1];
+    const g = parseFloat(last.glucose);
+    let recommendation = "N/A";
+    if (last.type === "fasting") {
+      recommendation = g < 70 ? "Low ⚠️ - Eat immediately!" : g <= 130 ? "Normal ✅" : "High ⚠️ - Monitor or visit doctor";
+    } else if (last.type === "random") {
+      recommendation = g < 80 ? "Low ⚠️ - Track symptoms" : g <= 180 ? "Acceptable ✅" : "High ⚠️ - Watch your diet";
+    } else if (last.type === "postmeal") {
+      recommendation = g < 90 ? "Low ⚠️" : g <= 180 ? "In range ✅" : "High ⚠️ - Consider nutrition advice";
+    }
+
+    lastReadingBox.innerHTML = `
+      <div class="row g-3">
+        <div class="col-6 col-md-3"><strong>Date:</strong> ${last.date}</div>
+        <div class="col-6 col-md-3"><strong>Type:</strong> ${last.type}</div>
+        <div class="col-6 col-md-3"><strong>Value:</strong> ${last.glucose} mg/dL</div>
+        <div class="col-6 col-md-3"><strong>Notes:</strong> ${last.notes || '-'}</div>
+        <div class="col-12"><strong>Recommendation:</strong> ${recommendation}</div>
+      </div>
+    `;
+  }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

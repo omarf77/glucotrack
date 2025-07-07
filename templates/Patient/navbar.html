@@ -1,0 +1,41 @@
+{% load static %}
+{% csrf_token %}
+ 
+
+<head>
+<meta charset="UTF-8" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ 
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <link href="{% static 'css/style.css' %}" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<header class="sticky-top bg-white shadow-sm">
+  <nav class="navbar navbar-expand-lg">
+    <div class="container py-2">
+      <a href="{% url 'patient_dashboard' %}" class="navbar-brand d-flex align-items-center">
+         <img src="{% static 'icon/favicon3.png' %}" alt="Logo" height="50" class="me-2">
+         <h2 class="fw-bold text-success mb-0">GlucoTrack</h2>
+       </a>
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+        <i class="bi bi-list fs-3 text-success"></i>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
+        <ul class="navbar-nav me-3">
+          <li class="nav-item"><a class="nav-link" href="{% url 'patient_blood' %}">Add Entry</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'patient_fullhistory' %}">Reading History</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'patient_kidsgame' %}">Kids’ Corner</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'patient_blog' %}">Blog</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'patient_mydoctor' %}">My Doctor</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'patient_prevention_test' %}">Prevention Test</a></li>
+
+        </ul>
+        <div class="d-flex">
+          <a href="{% url 'logout' %}" class="btn btn-outline-danger">Logout</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>

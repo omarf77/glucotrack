@@ -1,0 +1,193 @@
+{% load static %}
+{% block content %}
+<head></head>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+<div class="container py-5  ">
+  <div class="card shadow-sm">
+    <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+    <div class="d-flex align-items-center gap-2">
+   <a href="javascript:history.back()" class="btn btn-light btn-sm rounded nz d-flex align-items-center gap-1">
+  <i class="bi bi-arrow-left text-success"></i> <span>Back</span>
+</a>
+
+    <h1 class="mb-0 text-white">Chat with  {{ target_user.username }}</h1>
+  </div>
+  <h2 class="badge bg-light text-dark">Online</h2>
+   </div>
+
+    <div class="card-body chat-box" id="chat-box">
+      <div id="no-messages" class="text-muted text-center w-100">
+        <p class="fs-6 mt-3">No messages yet. Start the conversation now 💬</p>
+      </div>
+    </div>
+
+    <div class="card-footer bg-white border-top chat-footer">
+      <form method="post" id="chat-form" class="d-flex">
+        {% csrf_token %}
+        <div class="center">
+        <input type="text" name="message" id="chatInput" class="form-control me-2 border-success gap-5" placeholder="Type your message..." required>
+              <button class="btn btn-success rounded-circle d-flex align-items-center justify-content-center" type="submit" style="width: 48px; height: 48px;">
+              <i class="bi bi-send-fill fs-5"></i>
+              </button>
+
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<style>
+  body {
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  .chat-box {
+    height: 500px;
+    overflow-y: auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+  }
+
+  .message {
+    margin-bottom: 15px;
+    max-width: 75%;
+  }
+
+  .message .bubble {
+    display: inline-block;
+    padding: 10px 15px;
+    border-radius: 20px;
+    font-size: 0.95rem;
+    word-break: break-word;
+  }
+
+  .message.patient {
+    text-align: left;
+  }
+
+  .message.patient .bubble {
+    background-color: #e0f2f1;
+    color: #00695c;
+  }
+
+  .message.doctor {
+    text-align: right;
+    margin-left: auto;
+  }
+
+  .message.doctor .bubble {
+    background-color: #c8e6c9;
+    color: #2e7d32;
+  }
+
+  .chat-footer input {
+    border-radius: 20px;
+    height: 48px; 
+    width:500px;
+    font-size: 1rem;
+    padding-left: 20px;
+  }
+
+  .chat-footer button {
+        
+        height: 48px;
+        width: 48px;
+        font-size: 1.1rem;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+        
+  }
+
+  .timestamp {
+    font-size: 0.75rem;
+    color: #999;
+    margin-top: 4px;
+  }
+  .center  {
+    margin:20px;
+    display: flex;
+    justify-content: center;
+}
+.nz {
+  border: 1px solid #ced4da;
+  padding: 5px 10px;
+  border-radius: 10px;
+  background-color:rgb(40, 177, 46);
+  transition: background-color 0.2s;
+  text-decoration: none;
+}
+
+.nz:hover {
+  background-color: #f1f1f1;
+  text-decoration: none;
+}
+
+
+</style>
+
+<script>
+  function fetchMessages() {
+    fetch("{% url 'get_messages' target_user.id %}")
+      .then(response => response.json())
+      .then(data => {
+        const chatBox = document.getElementById('chat-box');
+        const noMsg = document.getElementById('no-messages');
+        chatBox.innerHTML = '';
+        const currentUser = "{{ request.user.username }}";
+
+        if (data.messages.length === 0) {
+          chatBox.appendChild(noMsg);
+          return;
+        }
+
+        data.messages.forEach(msg => {
+          const wrapper = document.createElement('div');
+          wrapper.classList.add('message');
+
+          if (msg.sender === currentUser) {
+            wrapper.classList.add('doctor');
+            wrapper.innerHTML = `
+              <div class="bubble doctor">${msg.message}</div>
+            `;
+          } else {
+            wrapper.classList.add('patient');
+            wrapper.innerHTML = `
+              <div class="bubble patient">${msg.message}</div>
+            `;
+          }
+
+          chatBox.appendChild(wrapper);
+        });
+
+        chatBox.scrollTop = chatBox.scrollHeight;
+      });
+  }
+
+  fetchMessages();
+  setInterval(fetchMessages, 2000);
+
+  document.getElementById('chat-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const form = e.target;
+    const formData = new FormData(form);
+
+    fetch("", {
+      method: "POST",
+      body: formData,
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+      }
+    }).then(() => {
+      form.reset();
+      fetchMessages();
+    });
+  });
+</script>
+{% endblock %}

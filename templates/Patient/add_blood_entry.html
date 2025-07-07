@@ -1,0 +1,130 @@
+{% load static %}
+{% load widget_tweaks %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+{% include 'Homepage/favicon.html'%}<!--favicon-->
+{% include 'Patient/navbar.html'%}<!--Navbar-->
+<head>
+  <title>Blood Sugar Entry - VitalTrack</title>
+</head>
+  <style>
+    .popup {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    .popup-content {
+      margin: 20% auto;
+      padding: 30px;
+      background: white;
+      border-radius: 12px;
+      text-align: center;
+      width: 500px;
+      height: 180px;
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
+
+    .popup-success {
+      background-color: #d4edda;
+      color: #155724;
+      border-left: 8px solid green;
+    }
+
+    .popup-warning {
+      background-color: #fff3cd;
+      color: #856404;
+      border-left: 8px solid orange;
+    }
+
+    .popup-danger {
+      background-color: #f8d7da;
+      color: #721c24;
+      border-left: 8px solid red;
+    }
+  </style>
+</head>
+
+<body>
+
+  
+
+  <main class="container py-5">
+    <h2 class="text-center text-success fw-bold mb-4">Log Blood Sugar Reading</h2>
+
+    <form method="POST" class="bg-white p-4 rounded shadow-sm mx-auto" style="max-width: 600px;">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label for="glucoseValue" class="form-label">Blood Sugar (mg/dL)</label>
+        {{ form.blood_sugar|add_class:"form-control" }}
+      </div>
+      <div class="mb-3">
+        <label for="readingDate" class="form-label">Date</label>
+        {{ form.date|add_class:"form-control" }}
+      </div>
+      <div class="mb-3">
+        <label for="readingType" class="form-label">Reading Type</label>
+        {{ form.reading_type|add_class:"form-select" }}
+      </div>
+      <div class="mb-3">
+        <label for="notes" class="form-label">Notes</label>
+        {{ form.note|add_class:"form-control" }}
+      </div>
+      <button type="submit" class="btn btn-success w-100">
+        <i class="bi bi-check-circle me-1"></i> Save Reading
+      </button>
+    </form>
+    
+<h4 class="text-center mt-5 text-success fw-bold">History & Recommendations</h4>
+<div class="table-responsive">
+  <table class="table table-bordered shadow-sm text-center">
+    <thead class="table-success">
+      <tr>
+        <th>Date</th>
+        <th>Type</th>
+        <th>Glucose</th>
+        <th>Notes</th>
+        <th>Recommendation</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for entry in history %}
+        <tr>
+          <td>{{ entry.date }}</td>
+          <td>{{ entry.reading_type }}</td>
+          <td>{{ entry.blood_sugar }}</td>
+          <td>{{ entry.note }}</td>
+          <td>
+            {% if entry.blood_sugar > 180 %}
+              High (⚠️) - Monitor or visit doctor
+            {% elif entry.blood_sugar < 70 %}
+              Low (⚠️) - Eat something sweet
+            {% else %}
+              Normal ✅
+            {% endif %}
+          </td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="5">No readings yet.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+   
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

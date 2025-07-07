@@ -1,0 +1,240 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+  {% include 'Homepage/favicon.html'%}<!--favicon-->
+  
+<head>
+  <meta charset="UTF-8" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GlucoTrack</title>
+
+  <!-- Bootstrap & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+
+  <!-- css-->
+  <link href="{% static 'css/style.css' %}" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+  <!-- Header -->
+  <header id="header" class="header sticky-top bg-white shadow-sm">
+    <nav class="navbar navbar-expand-lg">
+      <div class="container py-2">
+        <a href="{% url 'homepage' %}" class="navbar-brand d-flex align-items-center">
+         <img src="{% static 'icon/favicon3.png' %}" alt="Logo" height="50" class="me-2">
+         <h2 class="fw-bold text-success mb-0">GlucoTrack</h2>
+       </a>
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+          <i class="bi bi-list fs-3 text-success"></i>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end align-items-center" id="navbarContent">
+          <ul class="navbar-nav align-items-lg-center me-lg-4">
+            <li class="nav-item"><a class="nav-link px-3" href="#services">Services</a></li>
+            <li class="nav-item"><a class="nav-link px-3" href="#about">About Us</a></li>
+            <li class="nav-item"><a class="nav-link px-3" href="#testimonials">Feedbacks</a></li>
+            <li class="nav-item"><a class="nav-link px-3" href="#contact">contact_As</a></li>
+          </ul>
+          <div class="d-flex">
+            <a href="{% url 'login' %}" class="btn btn-success me-2 px-3 py-2">
+              <i class="bi bi-box-arrow-in-right me-1"></i> Login
+            </a>
+            <a href="{% url 'signup' %}" class="btn btn-success  px-3 py-2">
+              <i class="bi bi-person-plus me-1"></i> Sign Up
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero-section d-flex align-items-center justify-content-center text-center text-white">
+    <div class="sec"></div>
+    <div class="container position-relative">
+      <h1 class="display-4 fw-bold">Track Your Blood Sugar Smartly.</h1>
+      <p class="lead mb-4">Real-time blood sugar tracking for better diabetes care.</p>
+      <a href="#contact" class="btn btn-success btn-lg razan">Contact Us</a>
+    </div>
+  </section>
+
+  <!-- Services Section -->
+  <section id="services" class="services section py-5 bg-light mt-5">
+    <div class="container">
+      <div class="section-title text-center mb-5">
+        <h2 class="fw-bold text-success">What GlucoTrack Offers</h2>
+        <p class="text-muted">Smart tools to manage your diabetes journey easily and effectively.</p>
+      </div>
+      <div class="row gy-4">
+        <div class="col-lg-4 col-md-6">
+          <div class="service-item position-relative">
+            <div class="icon"><i class="fas fa-syringe"></i></div>
+            <h3>Glucose Entry</h3>
+            <p>Input your readingsusing paper logs.</p>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+          <div class="service-item position-relative">
+            <div class="icon"><i class="fas fa-chart-line"></i></div>
+            <h3>Glucose Dashboard</h3>
+            <p>See your data in one place</p>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+          <div class="service-item position-relative">
+            <div class="icon"><i class="fas fa-bell"></i></div>
+            <h3>Alerts</h3>
+            <p>Be alerted when your blood sugar is too high or too low.</p>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+          <div class="service-item position-relative">
+            <div class="icon"><i class="fas fa-chart-area"></i></div>
+            <h3>Blood Sugar Trends</h3>
+            <p>Monitor long-term changes with clear, actionable graphs.</p>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+          <div class="service-item position-relative">
+            <div class="icon"><i class="fas fa-user-md"></i></div>
+            <h3>Share with Doctor</h3>
+            <p>Send your log to your healthcare provider directly.</p>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+          <div class="service-item position-relative">
+            <div class="icon"><i class="fas fa-child"></i></div>
+            <h3>Type 1 Support for Kids</h3>
+            <p>Engaging tools help children with Type 1 Diabetes.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- About Us Section -->
+  <section id="about" class="py-5 bg-white mt-5 mb-5">
+    <div class="container">
+      <h2 class="text-center fw-bold text-success mb-4">About Us</h2>
+      <p class="text-center fs-5 text-muted">
+        GlucoTrack is more than just a glucose tracking tool. Our vision is to simplify life for diabetic patients of
+        all ages by providing smart plans, life-changing advice, and a user-friendly experience that empowers every
+        individual to take control of their health journey.
+      </p>
+    </div>
+  </section>
+  <!-- Testimonials Section -->
+  <section id="testimonials" class="testimonials section bg-light py-5">
+    <div class="container">
+      <div class="section-title text-center mb-5">
+        <h2 class="fw-bold text-success">Testimonials</h2>
+        <p class="text-muted">Real stories from families and patients using GlucoTrack to improve their diabetes care
+          journey.</p>
+      </div>
+
+      <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+
+          <!-- men-->
+          <div class="carousel-item active">
+            <div class="testimonial-item text-center bg-white p-4 rounded shadow-sm">
+              <p class="mb-4"><i class="bi bi-quote quote-icon-left"></i>
+                GlucoTrack helped my doctor monitor my readings more closely. I feel more confident managing my diabetes
+                every day.
+                <i class="bi bi-quote quote-icon-right"></i>
+              </p>
+              <img src="{% static 'image/man1.png' %}" class="rounded-circle mb-3" style="width: 80px;" alt="Middle-aged man">
+              <h5 class="fw-bold mb-0">Omar Nasser</h5>
+              <small class="text-muted">47 years old, Type 2 Diabetic</small>
+            </div>
+          </div>
+
+          <!-- women -->
+          <div class="carousel-item">
+            <div class="testimonial-item text-center bg-white p-4 rounded shadow-sm">
+              <p class="mb-4"><i class="bi bi-quote quote-icon-left"></i>
+                During my pregnancy, GlucoTrack helped me and my doctor track my sugar levels with ease. It made
+                everything less stressful.
+                <i class="bi bi-quote quote-icon-right"></i>
+              </p>
+              <img src="{% static 'image/women.png' %}" class="rounded-circle mb-3" style="width: 80px;" alt="Pregnant woman">
+              <h5 class="fw-bold mb-0">Sara Al-Haddad</h5>
+              <small class="text-muted">Expecting Mother, Gestational Diabetes</small>
+            </div>
+          </div>
+
+          <!--childe -->
+          <div class="carousel-item">
+            <div class="testimonial-item text-center bg-white p-4 rounded shadow-sm">
+              <p class="mb-4"><i class="bi bi-quote quote-icon-left"></i>
+                I like the colors and games in the Kids’ Corner! GlucoTrack made learning about diabetes fun and easy
+                for me.
+                <i class="bi bi-quote quote-icon-right"></i>
+              </p>
+              <img src="{% static 'image/child.png' %}" class="rounded-circle mb-3" style="width: 80px;" alt="Child user">
+              <h5 class="fw-bold mb-0">Youssef M.</h5>
+              <small class="text-muted">8 years old, Type 1 Diabetic</small>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Carousel controls -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon bg-success rounded-circle p-2" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+          <span class="carousel-control-next-icon bg-success rounded-circle p-2" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    </div>
+  </section>
+  <!-- Contact Section -->
+  <section id="contact" class="py-5 bg-white border-top">
+    <div class="container">
+      <div class="text-center mb-4">
+        <h2 class="fw-bold text-success">Contact Us</h2>
+        <p class="text-muted">Reach out to our clinic for appointments or inquiries.</p>
+      </div>
+
+      <div class="row justify-content-center text-center">
+        <div class="col-md-4 mb-3">
+          <i class="bi bi-telephone-fill fs-3 text-success mb-2"></i>
+          <h5 class="mb-1">Phone</h5>
+          <p class="text-muted mb-0">0772631310</p>
+        </div>
+        <div class="col-md-4 mb-3">
+          <i class="bi bi-envelope-fill fs-3 text-success mb-2"></i>
+          <h5 class="mb-1">Email</h5>
+          <p class="text-muted mb-0">omargassan21@gmail.com</p>
+        </div>
+        <div class="col-md-4 mb-3">
+          <i class="bi bi-geo-alt-fill fs-3 text-success mb-2"></i>
+          <h5 class="mb-1">Clinic Address</h5>
+          <p class="text-muted mb-0">Amman, Jordan – Sweifieh Medical Center</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Footer -->
+  <footer class="bg-dark text-light py-4 mt-5">
+    <div class="container text-center">
+      <p class="mb-1">GlucoTrack. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!--JS-->
+
+
+  <!-- Bootstrap Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,111 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% include 'Homepage/favicon.html' %} <!--favicon-->
+  {% include 'Patient/navbar.html' %} <!--Navbar-->
+
+  <title>Reading History</title>
+
+  <!-- PDF Export Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <style>
+  @media print {
+    .no-print { display: none !important;}
+  }
+</style>
+</head>
+<body>
+
+<div class="container mt-5" id="pdfContent">
+  <div class="d-flex justify-content-between">
+
+    <h3 class="text-success fw-bold">📊 Full Reading History</h3>
+    <div class="no-print">
+      <button class="btn btn-outline-primary btn-sm no-print" onclick="window.print()">🖨️ Print Report</button>
+      <button class="btn btn-outline-danger btn-sm no-print" onclick="generatePDF()">⬇️ Export PDF</button>
+      <button class="btn btn-outline-secondary btn-sm no-print" onclick="sortTableByDate()">🔃 Sort by Date</button>
+    </div>
+  </div>
+
+  <table class="table table-bordered shadow-sm mt-3">
+    <thead class="table-success text-center">
+      <tr>
+        <th>Date</th>
+        <th>Type</th>
+        <th>Glucose (mg/dL)</th>
+        <th>Notes</th>
+        <th>Recommendation</th>
+        <th class="no-print">Actions</th>
+      </tr>
+    </thead>
+    <tbody class="text-center">
+      {% for entry in entries %}
+        <tr>
+          <td>{{ entry.date }}</td>
+          <td>{{ entry.reading_type }}</td>
+          <td>{{ entry.blood_sugar }}</td>
+          <td>{{ entry.note }}</td>
+          <td>
+            {% if entry.blood_sugar > 180 %}
+              High (⚠️) - Monitor or visit doctor
+            {% elif entry.blood_sugar < 70 %}
+              Low (⚠️) - Eat something sugary
+            {% else %}
+              Normal ✅
+            {% endif %}
+          </td>
+          <td class="no-print">
+            <form method="post" action="{% url 'delete_entry' entry.id %}" onsubmit="return confirm('Are you sure you want to delete this entry?');">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-sm btn-danger">🗑 Delete</button>
+            </form>
+          </td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="6" class="text-muted">No readings found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<script>
+  let ascending = true;
+
+  function sortTableByDate() {
+    const table = document.querySelector("table tbody");
+    const rows = Array.from(table.rows);
+
+    rows.sort((a, b) => {
+      const dateA = new Date(a.cells[0].innerText.trim());
+      const dateB = new Date(b.cells[0].innerText.trim());
+      return ascending ? dateA - dateB : dateB - dateA;
+    });
+
+    rows.forEach(row => table.appendChild(row));
+    ascending = !ascending;
+  }
+
+  function generatePDF() {
+    const buttons = document.querySelectorAll('.no-print');
+    buttons.forEach(btn => btn.style.display = 'none');
+
+    const element = document.getElementById('pdfContent');
+    const opt = {
+      margin: 0.5,
+      filename: 'reading-history.pdf',
+      image: { type: 'jpeg', quality: 1 },
+      html2canvas: { scale: 5 },
+      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+
+    html2pdf().set(opt).from(element).save().then(() => {
+      buttons.forEach(btn => btn.style.display = '');
+    });
+  }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

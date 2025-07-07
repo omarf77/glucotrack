@@ -1,0 +1,352 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% include 'Homepage/favicon.html'%}<!--favicon-->
+  {% include 'Patient/navbar.html'%}<!--Navbar-->
+  
+  <title>Kids’ Corner - GlucoTrack</title>
+  <style>
+    body {
+      background: linear-gradient(180deg, #f0f9ff 0%, #fefce8 100%);
+      overflow-x: hidden;
+      font-family: 'Comic Sans MS', cursive;
+    }
+
+    .kids-section {
+      background: url('https://www.transparenttextures.com/patterns/candyhole.png'), linear-gradient(135deg, #ffeb3b 0%, #4caf50 100%);
+      padding: 50px 0;
+      border-radius: 30px;
+      margin-bottom: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kids-section::before, .kids-section::after {
+      content: '';
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      background: url('https://www.pngall.com/wp-content/uploads/2016/04/Star-PNG-Clipart.png') no-repeat center;
+      background-size: 100%;
+      animation: sparkle 3s infinite;
+    }
+
+    .kids-section::before { top: -50px; left: -50px; }
+    .kids-section::after { bottom: -50px; right: -50px; animation-delay: 1s; }
+
+    @keyframes sparkle {
+      0% { transform: scale(1); opacity: 0.7; }
+      50% { transform: scale(1.2); opacity: 1; }
+      100% { transform: scale(1); opacity: 0.7; }
+    }
+
+    .kids-section h2 {
+      color: #ff6f61;
+      text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+
+    .kids-section p {
+      color: #2d3748;
+      font-size: 1.2rem;
+      line-height: 1.8;
+    }
+
+    .gluco-hero {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      width: 150px;
+      height: 150px;
+      background: url('https://www.pngall.com/wp-content/uploads/5/Superhero-PNG-Image.png') no-repeat center;
+      background-size: contain;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+    .game-container {
+      background: #fff5f5;
+      border-radius: 25px;
+      padding: 25px;
+      border: 3px dashed #ff6f61;
+      margin-bottom: 20px;
+      min-height: 400px;
+      position: relative;
+    }
+
+    .game-option {
+      font-size: 1.5rem;
+      padding: 15px 25px;
+      margin: 10px;
+      border: 3px solid #4caf50;
+      border-radius: 15px;
+      display: inline-block;
+      cursor: pointer;
+      background: #e0f7fa;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      animation: wiggle 1.5s infinite;
+    }
+
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(5deg); }
+      75% { transform: rotate(-5deg); }
+    }
+
+    .game-option.correct {
+      background: #4caf50;
+      color: #fff;
+      border-color: #fff;
+      animation: none;
+    }
+
+    .game-option.wrong {
+      background: #e53e3e;
+      color: #fff;
+      border-color: #fff;
+      animation: none;
+    }
+
+    .game-feedback {
+      font-size: 1.5rem;
+      margin-top: 20px;
+      color: #ff6f61;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    .glucose-meter {
+      width: 200px;
+      height: 30px;
+      background: #e0e0e0;
+      border: 3px solid #4caf50;
+      border-radius: 15px;
+      margin: 20px auto;
+      overflow: hidden;
+    }
+
+    .glucose-fill {
+      height: 100%;
+      background: #ff6f61;
+      transition: width 0.5s ease;
+      text-align: center;
+      color: #fff;
+      line-height: 30px;
+    }
+
+    .level-title {
+      font-size: 2rem;
+      color: #4caf50;
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    .btn-kids {
+      font-size: 1.2rem;
+      padding: 15px 30px;
+      border-radius: 15px;
+      background: #ffeb3b;
+      color: #ff6f61;
+      border: 3px solid #4caf50;
+      transition: transform 0.3s ease;
+      animation: pulse 2s infinite;
+    }
+
+    .btn-kids:hover {
+      transform: scale(1.1);
+      background: #4caf50;
+      color: #fff;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    @media (max-width: 768px) {
+      .kids-section h2 {
+        font-size: 2rem;
+      }
+
+      .kids-section p, .game-feedback {
+        font-size: 1rem;
+      }
+
+      .game-option {
+        font-size: 1.2rem;
+        padding: 10px 20px;
+      }
+
+      .gluco-hero {
+        width: 100px;
+        height: 100px;
+      }
+
+      .glucose-meter {
+        width: 150px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+
+ 
+
+<main class="container py-5">
+  <h2 class="text-center fw-bold text-success mb-4 animate__animated animate__bounceIn">🌟 Gluco Hero Adventure! 🌟</h2>
+  <p class="text-center text-muted mb-5">Help Gluco Hero save the city from a Sugar Surge!</p>
+
+  <!-- Learning Content -->
+  <section class="kids-section">
+    <div class="container">
+      <h3 class="text-center mb-4">Learn About Diabetes</h3>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="card shadow-sm p-4">
+            <h5>What is Diabetes?</h5>
+            <p>Diabetes is when your body has trouble using sugar for energy. It’s like a superhero challenge we can beat with healthy habits!</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card shadow-sm p-4">
+            <h5>Healthy Eating</h5>
+            <p>Eat lots of veggies, fruits, and whole grains. Avoid too much candy to keep your sugar levels happy!</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card shadow-sm p-4">
+            <h5>Fun Fact</h5>
+            <p>Drinking water helps your body stay strong and keeps sugar in check. Aim for 6-8 glasses a day!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Game Section -->
+  <section class="py-5">
+    <div class="container">
+      <div class="game-container">
+        <div id="scoreDisplay">Score: 0</div>
+        <div class="level-title" id="levelTitle">Level</div>
+        <p id="questionText">Question here...</p>
+        <div id="choices"></div>
+        <div id="feedback" class="mt-3"></div>
+        <button id="nextBtn" class="btn btn-warning d-none">Next</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final Gluco Hero Section -->
+  <section class="py-5">
+    <div class="container text-center p-5 rounded-4" style="background: linear-gradient(135deg, #f9fbe7, #fff3e0); border: 5px dashed #f57c00;">
+      <h3 class="fw-bold text-warning mb-4" style="font-size: 2.2rem;">Ready to help Gluco Hero keep his sugar levels just right?</h3>
+      <img src="{% static 'image/gluco-hero.png' %}" alt="Gluco Hero" class="mb-4 animate__animated animate__bounce" style="width: 160px; height: auto;">
+      <br>
+      <a href="{% url 'patient_game' %}" target="_blank" class="btn btn-warning px-5 py-3 fw-bold" style="font-size: 1.5rem; border-radius: 30px; border: 3px solid #4caf50; box-shadow: 0 0 20px #ffeb3b;">
+        play now Gluco Hero 
+      </a>
+    </div>
+  </section>
+
+  <div class="text-center mt-5">
+    <a href="{% url 'patient_dashboard' %}" class="btn-kids"><i class="bi bi-arrow-left-circle-fill me-2"></i> Back to home</a>
+  </div>
+</main>
+
+<footer class="bg-dark text-light py-4 mt-5">
+  <div class="container text-center">
+    <p class="mb-1">© 2025 GlucoTrack</p>
+    <small>Empowering health, one reading at a time.</small>
+  </div>
+</footer>
+
+<script>
+  let score = 0;
+  let currentQuestion = 0;
+  const questions = [
+    { text: "You just woke up. What should you do first?", choices: ["Eat Candy", "Check Glucose", "Skip Breakfast"], correct: 1 },
+    { text: "Your glucose is low. What should you eat?", choices: ["Chocolate Bar", "Apple", "Nothing"], correct: 1 },
+    { text: "You feel dizzy at school. What do you do?", choices: ["Tell a teacher", "Hide it", "Run"], correct: 0 },
+    { text: "You are playing football. What should you carry?", choices: ["Juice Box", "Toy", "Nothing"], correct: 0 },
+    { text: "Your friend offers you soda. What do you say?", choices: ["Yes", "Maybe", "No thanks"], correct: 2 },
+    { text: "You skipped lunch. How do you feel later?", choices: ["Energetic", "Sleepy", "Happy"], correct: 1 },
+    { text: "You want dessert. What is a good choice?", choices: ["Fruit", "Cake", "Candy"], correct: 0 },
+    { text: "Before sleep, you should:", choices: ["Play games", "Check glucose", "Eat chocolate"], correct: 1 },
+    { text: "You feel shaky. What does that mean?", choices: ["High sugar", "Normal", "Low sugar"], correct: 2 },
+    { text: "Which drink helps your body most?", choices: ["Cola", "Water", "Juice"], correct: 1 }
+  ];
+
+  function renderQuestion() {
+    const q = questions[currentQuestion];
+    document.getElementById("levelTitle").textContent = `Level ${currentQuestion + 1}`;
+    document.getElementById("questionText").textContent = q.text;
+    document.getElementById("choices").innerHTML = "";
+    document.getElementById("feedback").textContent = "";
+    document.getElementById("nextBtn").classList.add("d-none");
+    q.choices.forEach((choice, index) => {
+      const btn = document.createElement("div");
+      btn.className = "game-option";
+      btn.textContent = choice;
+      btn.onclick = () => checkAnswer(index);
+      document.getElementById("choices").appendChild(btn);
+    });
+  }
+
+  function checkAnswer(selected) {
+    const q = questions[currentQuestion];
+    const options = document.querySelectorAll(".game-option");
+    options.forEach((el, idx) => {
+      el.style.pointerEvents = "none";
+      if (idx === q.correct) el.classList.add("correct");
+      else if (idx === selected) el.classList.add("wrong");
+    });
+    if (selected === q.correct) {
+      score += 10;
+      document.getElementById("feedback").textContent = "Correct! +10";
+    } else {
+      score -= 10;
+      document.getElementById("feedback").textContent = "Oops! -10";
+    }
+    document.getElementById("scoreDisplay").textContent = `Score: ${score}`;
+    document.getElementById("nextBtn").classList.remove("d-none");
+  }
+
+  document.getElementById("nextBtn").onclick = () => {
+    currentQuestion++;
+    if (currentQuestion < questions.length) {
+      renderQuestion();
+    } else {
+      if(score > 50)
+      {
+      document.querySelector(".game-container").innerHTML = `
+        <h2 class="text-success">you wen 🎉</h2>
+        <p class="text-muted">You finished all the challenges!</p>
+        <p class="fs-4">Your final score is <strong class="text-warning">${score}</strong> out of 100.</p>
+        <a href="" class="btn btn-success mt-3">Play Again</a>
+      `;
+      }
+       if(score < 50)
+      {
+      document.querySelector(".game-container").innerHTML = `
+        <h2 class="text-danger">Game over!</h2>
+        <p class="text-muted">Try again, you can.</p>
+        <p class="fs-4">Your final score is <strong class="text-warning">${score}</strong> out of 100.</p>
+        <a href="" class="btn btn-success mt-3">Play Again</a>
+      `;
+      }
+    }
+  };
+
+  renderQuestion();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

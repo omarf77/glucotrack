@@ -1,0 +1,95 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  {% include 'Homepage/navbar.html' %}
+<head>
+  {% include 'Homepage/favicon.html' %}
+  <title>Sign Up - GlucoTrack</title>
+</head>
+<body class="bg-light">
+
+<main class="d-flex justify-content-center align-items-center vh-100">
+  <div class="card shadow p-4" style="width: 100%; max-width: 500px;">
+    <h2 class="text-center fw-bold text-success mb-2">GlucoTrack</h2>
+    <p class="text-center text-muted mb-4">Create an account to start tracking your vitals</p>
+
+    <form method="POST" id="signupForm">
+             {% if form.non_field_errors %}
+         <div class="alert alert-danger">
+           {% for error in form.non_field_errors %}
+             <div>{{ error }}</div>
+            {% endfor %}
+       </div>
+       {% endif %}
+      {% csrf_token %}
+      <div class="row g-3">
+
+        <div class="col-6">
+          <label class="form-label">Username</label>
+          {{ form.username }}
+        </div>
+
+        <div class="col-6">
+          <label class="form-label">Phone Number</label>
+          {{ form.phone }}
+        </div>
+
+        <div class="col-12">
+          <label class="form-label">Email</label>
+          {{ form.email }}
+          {% for error in form.email.errors %}
+            <div class="text-danger small">{{ error }}</div>
+         {% endfor %}
+        </div>
+
+       <div class="col-12">
+          <label class="form-label">Password</label>
+          {{ form.password }}
+          {% for error in form.password.errors %}
+            <div class="text-danger small">{{ error }}</div>
+          {% endfor %}
+        </div>
+
+        <div class="col-12">
+          <label class="form-label">Confirm Password</label>
+          {{ form.confirm_password }}
+          {% for error in form.confirm_password.errors %}
+            <div class="text-danger small">{{ error }}</div>
+          {% endfor %}
+        </div>
+
+        <div class="col-6">
+          <label class="form-label">Gender</label>
+          {{ form.gender }}
+        </div>
+
+        
+
+        <div class="col-6">
+          <label class="form-label">Age</label>
+          {{ form.age }}
+        </div>
+
+        <div class="col-12">
+          <label class="form-label">Diabetes Type</label>
+          {{ form.diabetes_type }}
+        </div>
+
+       
+
+        <button type="submit" class="btn btn-success w-100 mt-3">
+          <i class="bi bi-person-plus me-1"></i> Sign Up
+        </button>
+
+        <div class="text-center mt-3">
+          <small>هل لديك حساب؟ <a href="{% url 'login' %}">Login</a></small>
+        </div>
+      </div>
+    </form>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
